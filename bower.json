@@ -1,5 +1,5 @@
 {
-  "name": "markercluster-v3-bower",
+  "name": "markercluster-v3",
   "version": "1.0.1",
   "main": [
     "markercluster.js"
