@@ -1,0 +1,18 @@
+{
+  "name": "markercluster-v3-bower",
+  "version": "1.0.1",
+  "main": [
+    "markercluster.js"
+  ],
+  "authors": [
+    "Danilo Recchia"
+  ],
+  "keywords": [
+    "markercluster",
+    "gmap",
+    "bower"
+  ],
+  "license": "CC BY 3.0 -- http://creativecommons.org/licenses/by/3.0/",
+  "ignore": [
+  ]
+}
