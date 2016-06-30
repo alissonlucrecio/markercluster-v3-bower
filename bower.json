@@ -2,13 +2,13 @@
   "name": "markercluster-v3",
   "version": "1.0.1",
   "main": [
-    "markercluster.js"
+    "markerclusterer.js"
   ],
   "authors": [
     "Danilo Recchia"
   ],
   "keywords": [
-    "markercluster",
+    "markerclusterer",
     "gmap",
     "bower"
   ],
