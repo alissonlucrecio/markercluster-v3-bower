@@ -1,6 +1,6 @@
 {
   "name": "markercluster-v3",
-  "version": "1.0.2",
+  "version": "1.0.2-fix",
   "main": [
     "markerclusterer.js"
   ],
