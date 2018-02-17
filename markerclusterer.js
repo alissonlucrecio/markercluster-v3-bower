@@ -10,10 +10,6 @@
  * @fileoverview
  * The library creates and manages per-zoom-level clusters for large amounts of
  * markers.
- * <br/>
- * This is a v3 implementation of the
- * <a href="http://gmaps-utility-library-dev.googlecode.com/svn/tags/markerclusterer/"
- * >v2 MarkerClusterer</a>.
  */
 
 /**
@@ -43,7 +39,14 @@
  *                cluster.
  *     'zoomOnClick': (boolean) Whether the default behaviour of clicking on a
  *                    cluster is to zoom into it.
- *     'averageCenter': (boolean) Wether the center of each cluster should be
+ *     'imagePath': (string) The base URL where the images representing
+ *                  clusters will be found. The full URL will be:
+ *                  {imagePath}[1-5].{imageExtension}
+ *                  Default: '../images/m'.
+ *     'imageExtension': (string) The suffix for images URL representing
+ *                       clusters will be found. See _imagePath_ for details.
+ *                       Default: 'png'.
+ *     'averageCenter': (boolean) Whether the center of each cluster should be
  *                      the average of all markers in the cluster.
  *     'minimumClusterSize': (number) The minimum number of markers to be in a
  *                           cluster before the markers are hidden and a count
@@ -191,9 +194,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
  * @type {string}
  * @private
  */
-MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ =
-    'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/' +
-    'images/m';
+MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ = '../images/m';
 
 
 /**
@@ -514,9 +515,12 @@ MarkerClusterer.prototype.removeMarker = function(marker, opt_nodraw) {
  * @param {boolean=} opt_nodraw Optional boolean to force no redraw.
  */
 MarkerClusterer.prototype.removeMarkers = function(markers, opt_nodraw) {
+  // create a local copy of markers if required
+  // (removeMarker_ modifies the getMarkers() array in place)
+  var markersCopy = markers === this.getMarkers() ? markers.slice() : markers;
   var removed = false;
 
-  for (var i = 0, marker; marker = markers[i]; i++) {
+  for (var i = 0, marker; marker = markersCopy[i]; i++) {
     var r = this.removeMarker_(marker);
     removed = removed || r;
   }
@@ -927,9 +931,9 @@ Cluster.prototype.remove = function() {
 
 
 /**
- * Returns the center of the cluster.
+ * Returns the number of markers in the cluster.
  *
- * @return {number} The cluster center.
+ * @return {number} The number of markers in the cluster.
  */
 Cluster.prototype.getSize = function() {
   return this.markers_.length;
@@ -937,9 +941,9 @@ Cluster.prototype.getSize = function() {
 
 
 /**
- * Returns the center of the cluster.
+ * Returns a list of the markers in the cluster.
  *
- * @return {Array.<google.maps.Marker>} The cluster center.
+ * @return {Array.<google.maps.Marker>} The markers in the cluster.
  */
 Cluster.prototype.getMarkers = function() {
   return this.markers_;
@@ -1057,7 +1061,7 @@ ClusterIcon.prototype.triggerClusterClick = function() {
   var markerClusterer = this.cluster_.getMarkerClusterer();
 
   // Trigger the clusterclick event.
-  google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_);
+  google.maps.event.trigger(markerClusterer.map_, 'clusterclick', this.cluster_);
 
   if (markerClusterer.isZoomOnClick()) {
     // Zoom into the cluster.
@@ -1300,11 +1304,11 @@ ClusterIcon.prototype['onAdd'] = ClusterIcon.prototype.onAdd;
 ClusterIcon.prototype['draw'] = ClusterIcon.prototype.draw;
 ClusterIcon.prototype['onRemove'] = ClusterIcon.prototype.onRemove;
 
-Object.keys = Object.keys || function(o) {  
-    var result = [];  
-    for(var name in o) {  
-        if (o.hasOwnProperty(name))  
-          result.push(name);  
-    }  
-    return result;  
+Object.keys = Object.keys || function(o) {
+    var result = [];
+    for(var name in o) {
+        if (o.hasOwnProperty(name))
+          result.push(name);
+    }
+    return result;
 };
